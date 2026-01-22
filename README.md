@@ -5,6 +5,7 @@
 ### 问题类型
 1. 简单检索问题: 咏柳絮的《临江仙》是谁写的? 《秋窗风雨夕》是谁写的?
 2. 复杂推索问题: 哪些地方体现了王熙凤的精明能干? 林黛玉是什么样的性格? 林黛玉和晴雯有相似之处吗?
+3. 和目标文本不相关的问题: 人造卫星有何用途?
 ### 回答示例
 咏柳絮的《临江仙》是谁写的?
 ![answer1.png](screenshots/answer1.png)
@@ -16,3 +17,5 @@
 ![answer4.png](screenshots/answer4.png)
 林黛玉和晴雯有相似之处吗?
 ![answer5.png](screenshots/answer5.png)
+人造卫星有何用途?
+![answer6.png](screenshots/answer6.png)
