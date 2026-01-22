@@ -1,0 +1,22 @@
+{
+  "total_chunks": 1132,
+  "by_type": {
+    "poem": 112,
+    "prose": 1020,
+    "other": 0
+  },
+  "len_avg": 502.4611307420495,
+  "len_p50": 524,
+  "len_p90": 816,
+  "len_max": 1198,
+  "config": {
+    "target_len": 500,
+    "min_len": 350,
+    "max_len": 650,
+    "allow_single_over_max": true,
+    "joiner": "\n",
+    "in_path": "../data_clean/paragraphs_v2.jsonl",
+    "out_chunks": "../data_clean/chunks.jsonl",
+    "out_stats": "../data_clean/chunks_stats.json"
+  }
+}

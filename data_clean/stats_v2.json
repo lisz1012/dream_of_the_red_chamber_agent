@@ -1,0 +1,45 @@
+{
+  "before": {
+    "chapters": 80,
+    "total": 1860,
+    "by_type": {
+      "poem": 112,
+      "prose": 1748,
+      "other": 0
+    },
+    "len_avg": 305.39623655913977,
+    "len_p50": 272,
+    "len_p90": 641,
+    "len_max": 1835,
+    "short_le_5": 77,
+    "short_le_10": 148,
+    "long_gt_1200": 13
+  },
+  "after": {
+    "chapters": 80,
+    "total": 1831,
+    "by_type": {
+      "poem": 112,
+      "prose": 1719,
+      "other": 0
+    },
+    "len_avg": 310.2605133806663,
+    "len_p50": 285,
+    "len_p90": 649,
+    "len_max": 1198,
+    "short_le_5": 15,
+    "short_le_10": 100,
+    "long_gt_1200": 0
+  },
+  "config": {
+    "short_len_threshold": 10,
+    "leadin_len_threshold": 20,
+    "merge_title_like_short": true,
+    "long_len_threshold": 1200,
+    "target_segment_len": 600,
+    "min_segment_len": 200,
+    "max_segment_len": 800,
+    "keep_poem_as_is": true,
+    "merged_joiner": "\n"
+  }
+}
