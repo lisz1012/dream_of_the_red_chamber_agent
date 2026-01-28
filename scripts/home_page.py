@@ -43,7 +43,7 @@ def on_generate_answer(history):
 with gr.Blocks(title="红楼梦 RAG 智能助手") as demo:
     gr.Markdown("## 《红楼梦》RAG 智能助手（Hybrid 检索 + 邻近扩展 + LLM）")
 
-    chatbot = gr.Chatbot(label="对话", height=520)
+    chatbot = gr.Chatbot(label="对话", height=720)
 
     user_input = gr.Textbox(
         label="输入问题",
