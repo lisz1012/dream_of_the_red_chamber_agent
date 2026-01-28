@@ -14,6 +14,41 @@ MODEL_NAME = "BAAI/bge-large-zh-v1.5"
 EXPECTED_DIM = 1024
 _model = None
 
+def normalize_query_text(q) -> str:
+    """
+    兼容：
+    - str
+    - [{"text": "...", "type": "text"}]  (Gradio MultimodalTextbox)
+    - ["..."]
+    - 其他类型 -> str(q)
+    """
+    if q is None:
+        return ""
+
+    # 最常见：Gradio MultimodalTextbox 的 list[dict]
+    if isinstance(q, list):
+        if len(q) == 0:
+            return ""
+        # 只有一个 text item 的情况
+        if len(q) == 1 and isinstance(q[0], dict) and "text" in q[0]:
+            return str(q[0]["text"] or "")
+        # 多个 item：把所有 text 拼起来
+        parts = []
+        for item in q:
+            if isinstance(item, dict) and "text" in item:
+                parts.append(str(item["text"] or ""))
+            elif isinstance(item, str):
+                parts.append(item)
+            else:
+                parts.append(str(item))
+        return " ".join([p for p in parts if p])
+
+    # 纯字符串
+    if isinstance(q, str):
+        return q
+
+    return str(q)
+
 def _get_model():
     global _model
     if _model is None:
@@ -21,7 +56,6 @@ def _get_model():
     return _model
 
 def embed_query(q: str):
-    q = (q or "").strip()
     if not q:
         raise ValueError("Empty query")
     vec = _get_model().encode([q], normalize_embeddings=True)
@@ -44,7 +78,8 @@ def main():
     # query = "金麒麟是谁的？"
     # query = "哪些地方体现了凤姐的理家能力？"
     query = "凤姐对于大观园里的各个女孩子的行事风格都有什么评价？"
-    q_dense = embed_query(query)
+    query_text = normalize_query_text(query).strip()
+    q_dense = embed_query(query_text)
 
     expr = "chapter >= 1 && chapter <= 80"
 
@@ -67,7 +102,7 @@ def main():
     )
 
     # 3) 融合（锚点类问题，sparse 权重大）
-    ranker = choose_ranker(query)  # ranker = WeightedRanker(0.7, 0.3)
+    ranker = choose_ranker(query_text)  # ranker = WeightedRanker(0.7, 0.3)
 
     res = client.hybrid_search(
         collection_name=COLLECTION_NAME,

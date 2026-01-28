@@ -4,6 +4,41 @@ from ranker_router import choose_ranker
 MILVUS_URI = "http://localhost:19530"
 COLLECTION = "hlm_chunks_v2"
 
+def normalize_query_text(q) -> str:
+    """
+    兼容：
+    - str
+    - [{"text": "...", "type": "text"}]  (Gradio MultimodalTextbox)
+    - ["..."]
+    - 其他类型 -> str(q)
+    """
+    if q is None:
+        return ""
+
+    # 最常见：Gradio MultimodalTextbox 的 list[dict]
+    if isinstance(q, list):
+        if len(q) == 0:
+            return ""
+        # 只有一个 text item 的情况
+        if len(q) == 1 and isinstance(q[0], dict) and "text" in q[0]:
+            return str(q[0]["text"] or "")
+        # 多个 item：把所有 text 拼起来
+        parts = []
+        for item in q:
+            if isinstance(item, dict) and "text" in item:
+                parts.append(str(item["text"] or ""))
+            elif isinstance(item, str):
+                parts.append(item)
+            else:
+                parts.append(str(item))
+        return " ".join([p for p in parts if p])
+
+    # 纯字符串
+    if isinstance(q, str):
+        return q
+
+    return str(q)
+
 def hybrid_retrieve(query: str, topk: int = 30):
     client = MilvusClient(uri=MILVUS_URI)
 
@@ -11,6 +46,7 @@ def hybrid_retrieve(query: str, topk: int = 30):
 
     # dense embedding 由你已有函数提供
     from hybrid_search import embed_query
+    query = normalize_query_text(query).strip()
     q_dense = embed_query(query)
 
     sparse_req = AnnSearchRequest(
